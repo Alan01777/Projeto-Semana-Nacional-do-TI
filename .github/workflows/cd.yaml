@@ -1,42 +1,50 @@
-name: CD
+# Define o nome do fluxo de trabalho como "deployment"
+name: deployment
 
+# Define os eventos que acionam o fluxo de trabalho
 on:
+  # Define que o fluxo de trabalho é acionado quando um workflow chamado "build" é concluído
   workflow_run:
-    workflows:
-      - "build"
+    workflows: ["build"]  # Define o nome do workflow que aciona este
     types:
-      - "completed"
+      - completed  # Define que o fluxo de trabalho é acionado quando o workflow especificado é concluído
 
-
+# Define os trabalhos a serem executados no fluxo de trabalho
 jobs:
-  Build_and_push:
-  name: Build and push
+  # Define um trabalho com o nome "Build_and_push_image"
+  Build_and_push_image:
+    name: Build and push image
+    # Define o ambiente de execução do trabalho como uma máquina virtual com Ubuntu
+    runs-on: ubuntu-latest
 
-  runs-on: ubuntu-latest
+    # Define as etapas (passos) a serem executadas dentro do trabalho
+    steps:
+      # Faz o checkout do repositório no ambiente de execução do fluxo de trabalho
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: checkout code
-      uses: actions/checkout@v4
+      # Gera um hash SHA curto do commit mais recente usando o valor de GITHUB_SHA
+      - name: Generate sha
+        id: generate_sha
+        run: |
+          SHA=$(echo $GITHUB_SHA | head -c7)  # Extrai os primeiros 7 caracteres do SHA do GitHub
+          echo "SHA=$SHA" >> $GITHUB_OUTPUT  # Escreve o SHA gerado em um arquivo de saída
 
-    - name: generate SHA
-      id: generate_sha
-      run: |
-      SHA=$(echo= $GITHUB_SHA | head -c7)
-      echo "SHA=$SHA" >> $GITHUB_OUTPUT
+      # Constrói uma imagem Docker usando o Dockerfile especificado
+      - name: Build docker image
+        run: |
+          docker build -t alan01777/semana-nacional-ti:${{ steps.generate_sha.outputs.sha }} -f .docker/docker_images/dockerfile.laravel .
 
-    - name: Build_image
-      run: |
-        docker build -t alan01777/laravel-test:${{ steps.generate_sha.$GITHUB_OUTPUT }} -f .docker/docker images/dockerfile.laravel .
+      # Faz login no registro de contêiner Docker usando credenciais específicas
+      - name: Log in to container registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}  # Obtém o nome de usuário do registro de contêiner do GitHub Secrets
+          password: ${{ secrets.DOCKERHUB_TOKEN }}     # Obtém a senha do registro de contêiner do GitHub Secrets
 
-    - name: log in dockerhub
-      uses: docker/login-action@v3
-      with:
-        username: alan01777
-        passsword: pawssord123
-
-    - name: push image
-      run: |
-        docker push alan01777/laravel-test:${{ steps.generate_sha.$GITHUB_OUTPUT }}
-
-
-
-
+      # Faz push da imagem Docker recém-construída para o registro de contêiner Docker
+      - name: Push image
+        run: |
+          docker push alan01777/semana-nacional-ti:${{ steps.generate_sha.outputs.sha }}  # Faz push da imagem com o SHA gerado como tag
+          docker tag alan01777/semana-nacional-ti:${{ steps.generate_sha.outputs.sha }} alan01777/semana-nacional-ti:latest  # Adiciona uma nova tag "latest" à imagem
+          docker push alan01777/semana-nacional-ti:latest  # Faz push da imagem com a nova tag "latest"
