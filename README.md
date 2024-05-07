@@ -27,7 +27,7 @@ Este projeto visa automatizar o processo de integração contínua e entrega con
     - Windows:
 
     ```bash
-    Remove-item -Recourse .git/
+    Remove-Item -Recurse -Force .git\
     ```
 
     - Linux:
