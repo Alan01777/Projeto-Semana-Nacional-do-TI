@@ -20,7 +20,7 @@ Este projeto visa automatizar o processo de integração contínua e entrega con
    ```bash
    git clone https://github.com/Alan01777/Projeto-Semana-Nacional-do-TI.git
     ```
-    
+
 3. Exclua a pasta .git:
     - Windows:
 
@@ -34,6 +34,7 @@ Este projeto visa automatizar o processo de integração contínua e entrega con
 
 4. Adicione seu repositório do GitHub ao projeto atual. Por exemplo:
     ```bash
+    git init
     git add .
     git commit -m "first commit"
     git branch -M main
