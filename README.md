@@ -17,9 +17,10 @@ Este projeto visa automatizar o processo de integração contínua e entrega con
 
 1. Crie seu próprio repositório no GitHub.
 2. Clone o repositório atual:
-   bash
+   ```bash
    git clone https://github.com/Alan01777/Projeto-Semana-Nacional-do-TI.git
-
+    ```
+    
 3. Exclua a pasta .git:
     - Windows:
 
