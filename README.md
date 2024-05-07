@@ -17,17 +17,21 @@ Este projeto visa automatizar o processo de integração contínua e entrega con
 
 1. Crie seu próprio repositório no GitHub.
 2. Clone o repositório atual:
-   ```bash
-   git clone https://github.com/Alan01777/Projeto-Semana-Nacional-do-TI.git
+
+    ```bash
+    git clone https://github.com/Alan01777/Projeto-Semana-Nacional-do-TI.git
     ```
 
 3. Exclua a pasta .git:
+
     - Windows:
 
     ```bash
     Remove-item -Recourse .git/
     ```
+
     - Linux:
+
     ```bash
     rm -rf .git/
     ```
@@ -42,10 +46,17 @@ Este projeto visa automatizar o processo de integração contínua e entrega con
     git push -u origin main
     ```
 
-## Instalando o Docker
+## Extras
 
-- Windows: [Download](https://www.docker.com/products/docker-desktop/)
-- Linux:
+### Link do projeto completo e comentado
+
+-   Link do repositório com o projeto comentado: [link](https://github.com/Alan01777/CI-CD---Semana-TI)
+-   Link da imagem construida no dockerhub: [link](https://hub.docker.com/r/alan01777/semana-nacional-ti/tags)
+
+### Instalando o Docker
+
+-   Windows: [Download](https://www.docker.com/products/docker-desktop/)
+-   Linux:
     ```bash
     curl -ssL get.docker.com | bash
     ```
