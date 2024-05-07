@@ -1,0 +1,42 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows:
+      - "build"
+    types:
+      - "completed"
+
+
+jobs:
+  Build_and_push:
+  name: Build and push
+
+  runs-on: ubuntu-latest
+
+    - name: checkout code
+      uses: actions/checkout@v4
+
+    - name: generate SHA
+      id: generate_sha
+      run: |
+      SHA=$(echo= $GITHUB_SHA | head -c7)
+      echo "SHA=$SHA" >> $GITHUB_OUTPUT
+
+    - name: Build_image
+      run: |
+        docker build -t alan01777/laravel-test:${{ steps.generate_sha.$GITHUB_OUTPUT }} -f .docker/docker images/dockerfile.laravel .
+
+    - name: log in dockerhub
+      uses: docker/login-action@v3
+      with:
+        username: alan01777
+        passsword: pawssord123
+
+    - name: push image
+      run: |
+        docker push alan01777/laravel-test:${{ steps.generate_sha.$GITHUB_OUTPUT }}
+
+
+
+
